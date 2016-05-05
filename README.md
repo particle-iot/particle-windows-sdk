@@ -30,7 +30,7 @@ Cloud SDK usage involves two basic classes: first is [`ParticleCloud`](https://g
 
 ## SDK calls from the UI thread
 
-Some calls from the SDK can both update properties or run callbacks on a non UI thread (e.g. Events). If your application has a UI thread make sure to set the `SynchronizationContext`:
+Some calls from the SDK can both update properties or run callbacks on a non UI thread (e.g. Events). If your application has a UI thread make sure to set the `SynchronizationContext`.
 
 ```cs
 ParticleCloud.SharedCloud.SynchronizationContext = System.Threading.SynchronizationContext.Current;
@@ -74,7 +74,7 @@ foreach (ParticleDevice device in devices)
 }
 ```
 
-### Get device instance by it's ID
+### Get device instance by its ID or name
 
 ```cs
 ParticleDevice device = ParticleCloud.SharedCloud.GetDeviceAsync("e9eb56e90e703f602d67ceb3");
@@ -82,7 +82,7 @@ ParticleDevice device = ParticleCloud.SharedCloud.GetDeviceAsync("e9eb56e90e703f
 
 ### Read a variable from a Particle device
 
-Assuming here that `myDevice` is an active instance of `ParticleDevice` class which represents a device claimed to current user:
+Assuming here that `myDevice` is an active instance of `ParticleDevice` class which represents a device claimed to current user.
 
 ```cs
 var variableResponse = myDevice.GetVariableAsync("temperature");
@@ -131,7 +131,7 @@ myDevice.RefreshAsync();
 Log out the user, clearing their session and access token:
 
 ```cs
-ParticleCloud.SharedCloud.LogOut()
+ParticleCloud.SharedCloud.LogOut();
 ```
 
 ## Events sub-system
@@ -158,7 +158,7 @@ Subscribe to all events, public and private, published by devices the user owns:
 Guid eventListenerID = ParticleCloud.SharedCloud.SubscribeToDevicesEventsWithPrefixAsync(handler, "temp");
 ```
 
-Subscribe to events from one specific device (by `PaticleDevice' or deviceId second parameter). If the API user owns the device, then he'll receive all events, public and private, published by that device. If the API user does not own the device he will only receive public events.
+Subscribe to events from one specific device. Pass a `PaticleDevice` or `deviceId` string as a second parameter. If the API user owns the device, then all events, public and private, published by that device will be received. If the API user does not own the device only public events will be received.
 
 ```cs
 Guid eventListenerID = ParticleCloud.SharedCloud.SubscribeToDeviceEventsWithPrefixAsync(handler, myDevice);
@@ -168,13 +168,11 @@ Guid eventListenerID = ParticleCloud.SharedCloud.SubscribeToDeviceEventsWithPref
 Guid eventListenerID = ParticleCloud.SharedCloud.SubscribeToDeviceEventsWithPrefixAsync(handler, "e9eb56e90e703f602d67ceb3");
 ```
 
-other option is calling same method via the `ParticleDevice` instance:
+The method `SubscribeToDeviceEventsWithPrefixAsync` can also be called on a `ParticleDevice` instance, guaranteeing that private events will be received since having access device instance in your app signifies that the user has this device claimed.
 
 ```cs
 Guid eventListenerID = myDevice.SubscribeToDeviceEventsWithPrefixAsync(handler, "temp");
 ```
-
-this guarantees that private events will be received since having access device instance in your app signifies that the user has this device claimed.
 
 ### Unsubscribing from events
 
@@ -195,7 +193,7 @@ myDevice.UnsubscribeFromEvent(eventListenerID);
 You can also publish an event from your app to the Particle Cloud:
 
 ```cs
-ParticleCloud.SharedCloud().PublishEventAsync("event_from_app", "event_payload", true, 60);
+ParticleCloud.SharedCloud.PublishEventAsync("event_from_app", "event_payload", true, 60);
 ```
 
 ## OAuth client configuration
@@ -226,8 +224,8 @@ You can either [download Particle Windows Cloud SDK](https://github.com/spark/pa
 ## Communication
 
 - If you **need help**, use [Our community website](http://community.particle.io), use the `Mobile` category for dicussion/troubleshooting Windows apps using the Particle Windows Cloud SDK.
-- If you are certain you **found a bug**, _and can provide steps to reliably reproduce it_, open an issue, label it as `bug`.
-- If you **have a feature request**, open an issue with an `enhancement` label on it
+- If you are certain you **found a bug**, _and can provide steps to reliably reproduce it_, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/bug).
+- If you **have a feature request**, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/enhancement).
 - If you **want to contribute**, submit a pull request, be sure to check out spark.github.io for our contribution guidelines, and please sign the [CLA](https://docs.google.com/a/particle.io/forms/d/1_2P-vRKGUFg5bmpcKLHO_qNZWGi5HKYnfrrkd-sbZoA/viewform).
 
 ## Maintainers
@@ -237,4 +235,4 @@ You can either [download Particle Windows Cloud SDK](https://github.com/spark/pa
 
 ## License
 
-Particle Windows Cloud SDK is available under the Apache License 2.0. See the LICENSE file for more info.
+Particle Windows Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/spark/particle-windows-sdk/blob/master/LICENSE) for more info.
