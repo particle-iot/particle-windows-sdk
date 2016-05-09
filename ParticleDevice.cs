@@ -151,9 +151,24 @@ namespace Particle.SDK
         /// <summary>
         /// Readonly PlatformId from ParticleDeviceResponse
         /// </summary>
-        public int PlatformId
+        public ParticleDeviceType PlatformId
         {
-            get { return deviceState.PlatformId; }
+            get
+            {
+                switch (deviceState.PlatformId)
+                {
+                    case 0:
+                        return ParticleDeviceType.Core;
+                    case 6:
+                        return ParticleDeviceType.Photon;
+                    case 8:
+                        return ParticleDeviceType.P1;
+                    case 10:
+                        return ParticleDeviceType.Electron;
+                    default:
+                        return ParticleDeviceType.Unknown;
+                }
+            }
         }
 
         /// <summary>
