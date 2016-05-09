@@ -308,30 +308,19 @@ namespace Particle.SDK
             if (firmwareStream == null)
                 throw new ArgumentNullException(nameof(firmwareStream));
 
-            State = ParticleDeviceState.Flashing;
-            isFlashing = true;
-
-            using (IHttpContent file = new HttpStreamContent(firmwareStream.AsInputStream()))
+            try
             {
-                file.Headers.ContentType = HttpMediaTypeHeaderValue.Parse("application/octet-stream");
-
-                var content = new HttpMultipartFormDataContent();
-                content.Add(new HttpStringContent("binary"), "file_type");
-                content.Add(file, "file", filename);
-
-                try
-                {
-                    onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent);
-                    var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{Id}", content);
-                    isFlashing = false;
-                    return true;
-                }
-                catch
-                {
-                    isFlashing = false;
-                    State = ParticleDeviceState.Unknown;
-                    return false;
-                }
+                isFlashing = true;
+                State = ParticleDeviceState.Flashing;
+                onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent);
+                await particleCloud.DeviceFlashBinaryAsync(this, firmwareStream, filename);
+                return true;
+            }
+            catch
+            {
+                isFlashing = false;
+                State = ParticleDeviceState.Unknown;
+                return false;
             }
         }
 
@@ -353,9 +342,10 @@ namespace Particle.SDK
 
             try
             {
+                isFlashing = true;
+                State = ParticleDeviceState.Flashing;
                 onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent);
                 var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{Id}", data);
-                isFlashing = true;
                 return true;
             }
             catch

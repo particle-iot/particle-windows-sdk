@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using Windows.Web.Http;
+using Windows.Web.Http.Headers;
 
 namespace Particle.SDK
 {
@@ -385,7 +386,55 @@ namespace Particle.SDK
                 return null;
             }
         }
-        
+
+        /// <summary>
+        /// Flash a compiled firmware to a device
+        /// A return of true only means it was sent to the device, not that flash is successful
+        /// </summary>
+        /// <param name="particeDevice">ParticleDevice</param>
+        /// <param name="firmwareStream">Stream of compiled binary</param>
+        /// <param name="filename">Filename of compiled binary</param>
+        /// <returns>Returns true if binary is sent to device</returns>
+        public async Task<bool> DeviceFlashBinaryAsync(ParticleDevice particeDevice, Stream firmwareStream, string filename)
+        {
+            return await DeviceFlashBinaryAsync(particeDevice.Id, firmwareStream, filename);
+        }
+
+        /// <summary>
+        /// Flash a compiled firmware to a device
+        /// A return of true only means it was sent to the device, not that flash is successful
+        /// </summary>
+        /// <param name="deviceId">Device ID</param>
+        /// <param name="firmwareStream">Stream of compiled binary</param>
+        /// <param name="filename">Filename of compiled binary</param>
+        /// <returns>Returns true if binary is sent to device</returns>
+        public async Task<bool> DeviceFlashBinaryAsync(string deviceID, Stream firmwareStream, string filename)
+        {
+            if (deviceID == null)
+                throw new ArgumentNullException(nameof(deviceID));
+            if (firmwareStream == null)
+                throw new ArgumentNullException(nameof(firmwareStream));
+
+            using (IHttpContent file = new HttpStreamContent(firmwareStream.AsInputStream()))
+            {
+                file.Headers.ContentType = HttpMediaTypeHeaderValue.Parse("application/octet-stream");
+
+                var content = new HttpMultipartFormDataContent();
+                content.Add(new HttpStringContent("binary"), "file_type");
+                content.Add(file, "file", filename);
+
+                try
+                {
+                    var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{deviceID}", content);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Gets a device
         /// </summary>
