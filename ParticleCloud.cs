@@ -1,34 +1,21 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Particle.SDK.Models;
+using Particle.SDK.RestApi;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
-using Windows.Web.Http;
-using Windows.Web.Http.Headers;
 
 namespace Particle.SDK
 {
-    #region Event Handlers
-
-    /// <summary>
-    /// Delegete define for callback on unauthorized event
-    /// </summary>
-    public delegate void ClientUnauthorizedEventHandler();
-
-    #endregion
-
     /// <summary>
     /// Class for communicating with Particle Cloud
     /// </summary>
-    public class ParticleCloud
+    public class ParticleCloud : ParticleRestApi
     {
         #region Internal Constants
 
-        internal static readonly string ParticleApiUrl = "https://api.particle.io/";
         internal static readonly string ParticleApiVersion = "v1";
 
         internal static readonly string ParticleApiPahtLogin = "oauth/token";
@@ -46,9 +33,6 @@ namespace Particle.SDK
 
         #region Private Members
 
-        private object clientUnauthorizedLock = new object();
-        private string logedInUsername = "";
-        private ParticleAuthenticationResponse particleAuthentication = null;
         private Dictionary<string, ParticleEventGroup> particleEventGroups = null;
         private Dictionary<Guid, ParticleEventHandlerData> particleEventHandlerDatas = null;
 
@@ -57,60 +41,6 @@ namespace Particle.SDK
         #region Private Static Members
 
         private static ParticleCloud particleCloud = null;
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// Global event called by ParticleCloud when any requests returns 401 Unauthorized
-        /// </summary>
-        public event ClientUnauthorizedEventHandler ClientUnauthorized;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// AccessToken from Login/Signup calls
-        /// </summary>
-        public string AccessToken
-        {
-            get
-            {
-                return particleAuthentication?.AccessToken;
-            }
-        }
-
-        /// <summary>
-        /// OAuth Client Id for creating tokens
-        /// </summary>
-        public string OAuthClientId { get; set; } = "particle";
-
-        /// <summary>
-        /// OAuth Client Secret for creating tokens
-        /// </summary>
-        public string OAuthClientSecret { get; set; } = "particle";
-
-        /// <summary>
-        /// SynchronizationContext for dispatching calls
-        /// </summary>
-        public SynchronizationContext SynchronizationContext
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Username from Login/Signup call
-        /// </summary>
-        public string Username
-        {
-            get
-            {
-                return logedInUsername;
-            }
-        }
 
         #endregion
 
@@ -140,21 +70,7 @@ namespace Particle.SDK
         /// <param name="accessToken">A token from a prevous OAuth call</param>
         public ParticleCloud(string accessToken = null)
         {
-            try
-            { 
-                ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("OAuthClient");
-                string oauth_client_id = resourceLoader.GetString("OAuthClientID");
-                string oauth_client_secret = resourceLoader.GetString("OAuthClientSecret");
-
-                if (!string.IsNullOrWhiteSpace(oauth_client_id) && !string.IsNullOrWhiteSpace(oauth_client_secret))
-                {
-                    OAuthClientId = oauth_client_id;
-                    OAuthClientSecret = oauth_client_secret;
-                }
-            }
-            catch
-            {
-            }
+            SetOAuthClient();
 
             if (accessToken != null)
             {
@@ -227,16 +143,6 @@ namespace Particle.SDK
             {
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Clear local state.
-        /// Does not destroy the token from Particle Cloud
-        /// </summary>
-        public void Logout()
-        {
-            particleAuthentication = null;
-            logedInUsername = "";
         }
 
         /// <summary>
@@ -407,41 +313,6 @@ namespace Particle.SDK
         public async Task<bool> DeviceFlashBinaryAsync(ParticleDevice particeDevice, Stream firmwareStream, string filename)
         {
             return await DeviceFlashBinaryAsync(particeDevice.Id, firmwareStream, filename);
-        }
-
-        /// <summary>
-        /// Flash a compiled firmware to a device
-        /// A return of true only means it was sent to the device, not that flash is successful
-        /// </summary>
-        /// <param name="deviceId">Device ID</param>
-        /// <param name="firmwareStream">Stream of compiled binary</param>
-        /// <param name="filename">Filename of compiled binary</param>
-        /// <returns>Returns true if binary is sent to device</returns>
-        public async Task<bool> DeviceFlashBinaryAsync(string deviceID, Stream firmwareStream, string filename)
-        {
-            if (deviceID == null)
-                throw new ArgumentNullException(nameof(deviceID));
-            if (firmwareStream == null)
-                throw new ArgumentNullException(nameof(firmwareStream));
-
-            using (IHttpContent file = new HttpStreamContent(firmwareStream.AsInputStream()))
-            {
-                file.Headers.ContentType = HttpMediaTypeHeaderValue.Parse("application/octet-stream");
-
-                var content = new HttpMultipartFormDataContent();
-                content.Add(new HttpStringContent("binary"), "file_type");
-                content.Add(file, "file", filename);
-
-                try
-                {
-                    var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{deviceID}", content);
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
         }
 
         /// <summary>
@@ -629,247 +500,7 @@ namespace Particle.SDK
 
         #endregion
 
-        #region Internal Threading Methods
-
-        /// <summary>
-        /// Dispatches an asynchronous message to a synchronization if set, otherwise calls the callback
-        /// </summary>
-        /// <param name="d">The System.Threading.SendOrPostCallback delegate to call</param>
-        /// <param name="state">The object passed to the delegate</param>
-        internal void SynchronizationContextPost(SendOrPostCallback d, object state)
-        {
-            if (SynchronizationContext != null)
-                SynchronizationContext.Post(d, state);
-            else
-                d(state);
-        }
-
-        #endregion
-
-        #region Internal Server Methods
-
-        /// <summary>
-        /// Make a DELETE requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <returns>Retuns string response from Particle Cloud DELETE request</returns>
-        internal async Task<string> DeleteDataAsync(string path)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Delete, CreateUriFromPathString(path));
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a GET requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <returns>Retuns string response from Particle Cloud GET request</returns>
-        internal async Task<string> GetDataAsync(string path)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, CreateUriFromPathString(path));
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a POST requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal async Task<string> PostDataAsync(string path)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a POST requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
-        /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal async Task<string> PostDataAsync(string path, Dictionary<string, string> data = null)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
-            if (data != null)
-                request.Content = new HttpFormUrlEncodedContent(data);
-
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a POST requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <param name="content">IHttpContent to send in request</param>
-        /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal async Task<string> PostDataAsync(string path, IHttpContent content = null)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
-            request.Content = content;
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a PUT requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal async Task<string> PutDataAsync(string path)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a PUT requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
-        /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal async Task<string> PutDataAsync(string path, Dictionary<string, string> data = null)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
-            if (data != null)
-                request.Content = new HttpFormUrlEncodedContent(data);
-
-            return await SendAsync(request);
-        }
-
-        /// <summary>
-        /// Make a PUT requests to the Particle Cloud
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <param name="content">IHttpContent to send in request</param>
-        /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal async Task<string> PutDataAsync(string path, IHttpContent content = null)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
-            request.Content = content;
-            return await SendAsync(request);
-        }
-
-        #endregion
-
-        #region Private Server Methods
-
-        /// <summary>
-        /// Function to return full URI to Particle Cloud endpoint from relative path
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud endpoint</param>
-        /// <returns>Returns full Uri given a partial path</returns>
-        private Uri CreateUriFromPathString(string path)
-        {
-            if (!string.IsNullOrWhiteSpace(AccessToken))
-                return new Uri($"{ParticleApiUrl}{path}?access_token={AccessToken}");
-            else
-                return new Uri($"{ParticleApiUrl}{path}");
-        }
-
-        /// <summary>
-        /// Genericized function to make requests to the Particle Cloud and throw exceptions on HTTP errors
-        /// </summary>
-        /// <param name="request">HttpRequestMessage with path and method</param>
-        /// <returns>Retuns string response from Particle Cloud request</returns>
-        private async Task<string> SendAsync(HttpRequestMessage request)
-        {
-            using (var filter = new Windows.Web.Http.Filters.HttpBaseProtocolFilter())
-            {
-                filter.CacheControl.ReadBehavior = Windows.Web.Http.Filters.HttpCacheReadBehavior.MostRecent;
-                using (HttpClient client = new HttpClient(filter))
-                {
-                    var response = await client.SendRequestAsync(request);
-                    var responseContent = await response.Content.ReadAsStringAsync();
-
-                    switch (response.StatusCode)
-                    {
-                        case HttpStatusCode.Ok:
-                            return responseContent;
-
-                        case HttpStatusCode.Unauthorized:
-                            bool loggedOut = false;
-
-                            lock (clientUnauthorizedLock)
-                            {
-                                if (particleAuthentication != null)
-                                {
-                                    loggedOut = true;
-                                    Logout();
-                                }
-                            }
-
-                            if (loggedOut && ClientUnauthorized != null)
-                                ClientUnauthorized();
-                            throw new ParticleUnauthorizedException(responseContent);
-
-                        case HttpStatusCode.NotFound:
-                            throw new ParticleNotFoundException(responseContent);
-
-                        case HttpStatusCode.BadRequest:
-                            throw new ParticleRequestBadRequestException(responseContent);
-
-                        default:
-                            throw new Exception();
-                    }
-
-                }
-            }
-        }
-
-        #endregion
-
         #region Private Event Methods
-
-        /// <summary>
-        /// Long running task to listen for events
-        /// </summary>
-        /// <param name="path">Relative path to Particle Cloud event endpoint</param>
-        /// <param name="particleEventGroup">ParticleEventGroup to send new events to</param>
-        /// <returns>Returns Task of long running event task</returns>
-        private async Task ListenForEventAsync(string path, ParticleEventGroup particleEventGroup)
-        {
-            string eventName = "";
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var url = new Uri($"https://api.particle.io/{path}/?access_token={AccessToken}");
-                    var request = new HttpRequestMessage(HttpMethod.Get, url);
-
-                    using (var response = await client.SendRequestAsync(request, HttpCompletionOption.ResponseHeadersRead))
-                    {
-                        using (var stream = await response.Content.ReadAsInputStreamAsync())
-                        using (var reader = new StreamReader(stream.AsStreamForRead()))
-                        {
-                            while (!reader.EndOfStream && particleEventGroup.HasHandlers)
-                            {
-                                var outputString = reader.ReadLine();
-
-                                if (outputString.StartsWith("event:"))
-                                {
-                                    eventName = outputString.Substring(6).Trim();
-                                }
-                                else if (outputString.StartsWith("data:") && !string.IsNullOrWhiteSpace(eventName))
-                                {
-                                    var jsonSerializerSettings = new JsonSerializerSettings() { DateTimeZoneHandling = DateTimeZoneHandling.Local };
-                                    var particleEventResponse = JsonConvert.DeserializeObject<ParticleEventResponse>(outputString.Substring(5), jsonSerializerSettings);
-                                    particleEventResponse.Name = eventName;
-                                    eventName = "";
-
-                                    SynchronizationContextPost(a =>
-                                    {
-                                        particleEventGroup.NewMessage(this, particleEventResponse);
-                                    }, null);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-        }
 
         /// <summary>
         /// Creates a new long running task to listen for events

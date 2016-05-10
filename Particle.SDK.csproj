@@ -50,6 +50,8 @@
     <Compile Include="ParticleExceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ParticleEventGroup.cs" />
+    <Compile Include="RestApi\ParticleRestApiBase.cs" />
+    <Compile Include="RestApi\ParticleRestApiWindowsWebHttp.cs" />
     <Compile Include="Utils\DeviceNameGenerator.cs" />
     <Compile Include="Models\ParticleVariableResponse.cs" />
   </ItemGroup>
@@ -66,8 +68,7 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetPath)" ContinueOnError="true"
-          DestinationFolder="$(SolutionDir)Nuget\$(Configuration)" />
+    <Copy SourceFiles="$(TargetPath)" ContinueOnError="true" DestinationFolder="$(SolutionDir)Nuget\$(Configuration)" />
     <Exec Command="NuGet.exe pack $(ProjectFileName) -Prop Configuration=$(Configuration) -OutputDirectory $(SolutionDir)Nuget\$(Configuration)" />
     <Exec Command="NuGet.exe pack $(ProjectFileName) -Prop Configuration=$(Configuration) -OutputDirectory $(SolutionDir)Nuget\$(Configuration) -Symbols" />
   </Target>
