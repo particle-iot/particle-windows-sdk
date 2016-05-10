@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particle.SDK.net452", "Particle.SDK.net452.csproj", "{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particle.SDK.win81+wpa81", "Particle.SDK.win81+wpa81.csproj", "{DC5F6004-31B8-4E9A-B034-4F163905E54E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5} = {F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Release|Any CPU.ActiveCfg = Release|Any CPU

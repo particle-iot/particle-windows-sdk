@@ -15,4 +15,7 @@
     <copyright>Copyright 2016</copyright>
     <tags>IoT Photon Particle Tinker connected Spark Core Electron Arduino</tags>
   </metadata>
+  <files>
+    <file src="bin\$configuration$\net452\Particle.SDK.dll" target="lib\net452\Particle.SDK.dll" />
+  </files>
 </package>
