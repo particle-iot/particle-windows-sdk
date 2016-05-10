@@ -17,7 +17,7 @@ namespace Particle.SDK.Models
         [JsonProperty("last_handshake_at")]
         public DateTime LastHandshakeAt { get; set; }
         [JsonProperty("deviceID")]
-        public string DeviceID { get; set; }
+        public string DeviceId { get; set; }
         [JsonProperty("product_id")]
         public int ProductId { get; set; }
     }

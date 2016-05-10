@@ -451,9 +451,9 @@ namespace Particle.SDK
         /// <param name="deviceId">ParticleDevice ID to limit event stream to</param>
         /// <param name="eventNamePrefix">Prefix to monitor on event stream</param>
         /// <returns>Returns GUID reference to long running event task</returns>
-        public async Task<Guid> SubscribeToDeviceEventsWithPrefixAsync(ParticleEventHandler eventHandler, string deviceID, string eventNamePrefix = "")
+        public async Task<Guid> SubscribeToDeviceEventsWithPrefixAsync(ParticleEventHandler eventHandler, string deviceId, string eventNamePrefix = "")
         {
-            string path = string.Format(ParticleApiPathDeviceEvents, deviceID);
+            string path = string.Format(ParticleApiPathDeviceEvents, deviceId);
 
             if (string.IsNullOrWhiteSpace(eventNamePrefix))
                 return await SubscribeToEventAsync($"{ParticleApiVersion}/{path}", eventHandler);

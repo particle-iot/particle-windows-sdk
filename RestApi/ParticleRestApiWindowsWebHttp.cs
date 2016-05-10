@@ -25,10 +25,10 @@ namespace Particle.SDK.RestApi
         /// <param name="firmwareStream">Stream of compiled binary</param>
         /// <param name="filename">Filename of compiled binary</param>
         /// <returns>Returns true if binary is sent to device</returns>
-        public override async Task<bool> DeviceFlashBinaryAsync(string deviceID, Stream firmwareStream, string filename)
+        public override async Task<bool> DeviceFlashBinaryAsync(string deviceId, Stream firmwareStream, string filename)
         {
-            if (deviceID == null)
-                throw new ArgumentNullException(nameof(deviceID));
+            if (deviceId == null)
+                throw new ArgumentNullException(nameof(deviceId));
             if (firmwareStream == null)
                 throw new ArgumentNullException(nameof(firmwareStream));
 
@@ -42,7 +42,7 @@ namespace Particle.SDK.RestApi
 
                 try
                 {
-                    var responseContent = await PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{deviceID}", content);
+                    var responseContent = await PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{deviceId}", content);
                     return true;
                 }
                 catch
