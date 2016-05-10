@@ -20,7 +20,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\portable46-win81+wpa81\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\portable46-win81+wpa81\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +30,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\portable46-win81+wpa81\</OutputPath>
+    <IntermediateOutputPath>obj\Release\portable46-win81+wpa81\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -39,21 +41,22 @@
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ParticleEventHandlerData.cs" />
+    <Compile Include="Models\ParticleAuthenticationResponse.cs" />
     <Compile Include="Models\ParticleDeviceResponse.cs" />
+    <Compile Include="Models\ParticleEventGroup.cs" />
+    <Compile Include="Models\ParticleEventHandlerData.cs" />
     <Compile Include="Models\ParticleEventResponse.cs" />
     <Compile Include="Models\ParticleFunctionResponse.cs" />
     <Compile Include="Models\ParticleGenericResponse.cs" />
-    <Compile Include="Models\ParticleAuthenticationResponse.cs" />
+    <Compile Include="Models\ParticleVariableResponse.cs" />
     <Compile Include="ParticleCloud.cs" />
     <Compile Include="ParticleDevice.cs" />
     <Compile Include="ParticleExceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\ParticleEventGroup.cs" />
+    <Compile Include="Properties\AssemblyInfo.win81+wpa81.cs" />
     <Compile Include="RestApi\ParticleRestApiBase.cs" />
     <Compile Include="RestApi\ParticleRestApiWindowsWebHttp.cs" />
     <Compile Include="Utils\DeviceNameGenerator.cs" />
-    <Compile Include="Models\ParticleVariableResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -68,7 +71,7 @@
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetPath)" ContinueOnError="true" DestinationFolder="$(SolutionDir)Nuget\$(Configuration)" />
+    <Copy SourceFiles="$(TargetPath)" ContinueOnError="true" DestinationFolder="$(SolutionDir)Nuget\$(Configuration)\portable46-win81+wpa81" />
     <Exec Command="NuGet.exe pack $(ProjectFileName) -Prop Configuration=$(Configuration) -OutputDirectory $(SolutionDir)Nuget\$(Configuration)" />
     <Exec Command="NuGet.exe pack $(ProjectFileName) -Prop Configuration=$(Configuration) -OutputDirectory $(SolutionDir)Nuget\$(Configuration) -Symbols" />
   </Target>
