@@ -126,6 +126,14 @@ Refreshes all the locally stored properties from the cloud and physical device (
 myDevice.RefreshAsync();
 ```
 
+### Signal a device
+
+Send a signal to the device to shout rainbows:
+
+```cs
+myDevice.SignalAsync(true);
+```
+
 ### Log out
 
 Log out the user, clearing their session and access token:

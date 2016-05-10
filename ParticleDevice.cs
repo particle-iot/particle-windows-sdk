@@ -480,6 +480,30 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Send a signal to the device to shout rainbows
+        /// </summary>
+        /// <param name="turnSignalOn">Turn signal on</param>
+        /// <returns>True on success</returns>
+        public async Task<bool> SignalAsync(bool turnSignalOn)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"signal", turnSignalOn ? "1" : "0"}
+            };
+
+            try
+            {
+                var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{Id}", data);
+                var result = JToken.Parse(responseContent);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Unclaim a device from users account
         /// </summary>
         /// <returns>True if the device is successfully unbclaimed</returns>
