@@ -48,8 +48,6 @@ namespace Particle.SDK
 
         private object clientUnauthorizedLock = new object();
         private string logedInUsername = "";
-        private string oauth_client_id;
-        private string oauth_client_secret;
         private ParticleAuthenticationResponse particleAuthentication = null;
         private Dictionary<string, ParticleEventGroup> particleEventGroups = null;
         private Dictionary<Guid, ParticleEventHandlerData> particleEventHandlerDatas = null;
@@ -83,6 +81,16 @@ namespace Particle.SDK
                 return particleAuthentication?.AccessToken;
             }
         }
+
+        /// <summary>
+        /// OAuth Client Id for creating tokens
+        /// </summary>
+        public string OAuthClientId { get; set; } = "particle";
+
+        /// <summary>
+        /// OAuth Client Secret for creating tokens
+        /// </summary>
+        public string OAuthClientSecret { get; set; } = "particle";
 
         /// <summary>
         /// SynchronizationContext for dispatching calls
@@ -135,17 +143,18 @@ namespace Particle.SDK
             try
             { 
                 ResourceLoader resourceLoader = ResourceLoader.GetForCurrentView("OAuthClient");
-                oauth_client_id = resourceLoader.GetString("OAuthClientID");
-                oauth_client_secret = resourceLoader.GetString("OAuthClientSecret");
+                string oauth_client_id = resourceLoader.GetString("OAuthClientID");
+                string oauth_client_secret = resourceLoader.GetString("OAuthClientSecret");
+
+                if (!string.IsNullOrWhiteSpace(oauth_client_id) && !string.IsNullOrWhiteSpace(oauth_client_secret))
+                {
+                    OAuthClientId = oauth_client_id;
+                    OAuthClientSecret = oauth_client_secret;
+                }
             }
             catch
             {
             }
-            
-            if (string.IsNullOrWhiteSpace(oauth_client_id))
-                oauth_client_id = "particle";
-            if (string.IsNullOrWhiteSpace(oauth_client_secret))
-                oauth_client_secret = "particle";
 
             if (accessToken != null)
             {
@@ -178,8 +187,8 @@ namespace Particle.SDK
                 {"username", username},
                 {"password", password},
                 {"expires_in", expiresIn.ToString()},
-                {"client_id", oauth_client_id},
-                {"client_secret", oauth_client_secret}
+                {"client_id", OAuthClientId},
+                {"client_secret", OAuthClientSecret}
             };
 
             try
