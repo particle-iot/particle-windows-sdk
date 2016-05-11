@@ -575,25 +575,6 @@ namespace Particle.SDK
 
         #endregion
 
-        #region Internal Static Medthods
-
-        /// <summary>
-        /// Helper function to sort ParticleDevices by online state and than alphabetically
-        /// </summary>
-        /// <param name="device1">First device to compare</param>
-        /// <param name="device2">Second device to compare</param>
-        /// <returns>Comparison result</returns>
-        internal static int SortCompare(ParticleDevice device1, ParticleDevice device2)
-        {
-            int result = device2.Connected.CompareTo(device1.Connected);
-            if (result == 0)
-                result = device1.Name.CompareTo(device2.Name);
-
-            return result;
-        }
-
-        #endregion
-
         #region Private Methods
 
         /// <summary>

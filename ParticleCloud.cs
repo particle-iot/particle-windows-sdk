@@ -357,8 +357,6 @@ namespace Particle.SDK
                     devices.Add(particleDevice);
                 }
 
-                devices.Sort(ParticleDevice.SortCompare);
-
                 foreach (ParticleDevice device in devices)
                 {
                     if (device.Connected)
