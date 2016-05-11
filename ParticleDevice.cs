@@ -19,10 +19,15 @@ namespace Particle.SDK
     public enum ParticleDeviceType
     {
         Unknown = -1,
-        Core = 0,
-        Photon = 6,
-        P1 = 8,
-        Electron = 10
+        ParticleCore = 0,
+        ParticlePhoton = 6,
+        ParticleP1 = 8,
+        ParticleElectron = 10,
+
+        // Non Particle Devices
+        DigistumpOak = 82,
+        RedBearDuo = 88,
+        BluzDK = 103,
     }
 
     /// <summary>
@@ -118,23 +123,22 @@ namespace Particle.SDK
         /// <summary>
         /// Readonly ProductId from ParticleDeviceResponse
         /// </summary>
-        public ParticleDeviceType ProductId
+        public int ProductId
         {
             get
             {
-                switch (deviceState.ProductId)
-                {
-                    case 0:
-                        return ParticleDeviceType.Core;
-                    case 6:
-                        return ParticleDeviceType.Photon;
-                    case 8:
-                        return ParticleDeviceType.P1;
-                    case 10:
-                        return ParticleDeviceType.Electron;
-                    default:
-                        return ParticleDeviceType.Unknown;
-                }
+                return deviceState.ProductId;
+            }
+        }
+
+        /// <summary>
+        /// Readonly Known ProductId from ParticleDeviceResponse
+        /// </summary>
+        public ParticleDeviceType KnownProductId
+        {
+            get
+            {
+                return IntToParticleDeviceType(deviceState.ProductId);
             }
         }
 
@@ -149,23 +153,22 @@ namespace Particle.SDK
         /// <summary>
         /// Readonly PlatformId from ParticleDeviceResponse
         /// </summary>
-        public ParticleDeviceType PlatformId
+        public int PlatformId
         {
             get
             {
-                switch (deviceState.PlatformId)
-                {
-                    case 0:
-                        return ParticleDeviceType.Core;
-                    case 6:
-                        return ParticleDeviceType.Photon;
-                    case 8:
-                        return ParticleDeviceType.P1;
-                    case 10:
-                        return ParticleDeviceType.Electron;
-                    default:
-                        return ParticleDeviceType.Unknown;
-                }
+                return deviceState.PlatformId;
+            }
+        }
+
+        /// <summary>
+        /// Readonly Known PlatformId from ParticleDeviceResponse
+        /// </summary>
+        public ParticleDeviceType KnownPlatformId
+        {
+            get
+            {
+                return IntToParticleDeviceType(deviceState.PlatformId);
             }
         }
 
@@ -546,6 +549,51 @@ namespace Particle.SDK
 
             MbsUsed = mbsUsed;
             return mbsUsed;
+        }
+
+        #endregion
+
+        #region Public Static Methods
+
+        /// <summary>
+        /// Convert Value into known Particle Device Type
+        /// </summary>
+        /// <param name="value">Value to convert</param>
+        /// <returns>ParticleDeviceTypealid ParticleDeviceType or Unknown</returns>
+        public static ParticleDeviceType IntToParticleDeviceType(int value)
+        {
+            if (Enum.IsDefined(typeof(ParticleDeviceType), value))
+                return (ParticleDeviceType)value;
+            else
+                return ParticleDeviceType.Unknown;
+        }
+
+        public static string ParticleDeviceTypeToString(int value)
+        {
+            return ParticleDeviceTypeToString((ParticleDeviceType)value);
+        }
+
+        public static string ParticleDeviceTypeToString(ParticleDeviceType value)
+        {
+            switch (value)
+            {
+                case ParticleDeviceType.ParticleCore:
+                    return "Core";
+                case ParticleDeviceType.ParticlePhoton:
+                    return "Photon";
+                case ParticleDeviceType.ParticleP1:
+                    return "P1";
+                case ParticleDeviceType.ParticleElectron:
+                    return "Electron";
+                case ParticleDeviceType.DigistumpOak:
+                    return "Digistump Oak";
+                case ParticleDeviceType.RedBearDuo:
+                    return "Red Bear Duo";
+                case ParticleDeviceType.BluzDK:
+                    return "Bluz DK";
+                default:
+                    return "Unknown";
+            }
         }
 
         #endregion
