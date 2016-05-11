@@ -57,7 +57,7 @@ namespace Particle.SDK
         private ParticleDeviceState state = ParticleDeviceState.Unknown;
         private bool isFlashing = false;
         private double mbsUsed = 0;
-        private Guid onlineEventListenerID;
+        private Guid? onlineEventListenerID = null;
 
         #endregion
 
@@ -250,6 +250,19 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Readonly value of flashing state
+        /// </summary>
+        public bool IsFlashing
+        {
+            get { return isFlashing; }
+            internal set
+            {
+                isFlashing = value;
+                OnPropertyChanged("IsFlashing");
+            }
+        }
+
+        /// <summary>
         /// Readonly amount of megabytes used in billing period for an Electron
         /// </summary>
         public double MbsUsed
@@ -298,28 +311,41 @@ namespace Particle.SDK
         #region Public Methods
 
         /// <summary>
+        /// Used when you detect the device is flashing by external means and wish to update the model
+        /// </summary>
+        /// <param name="completed">True if the flash is completed</param>
+        public void FlagFlashStatusChange(bool completed = false)
+        {
+            IsFlashing = !completed;
+            if (!completed)
+                State = ParticleDeviceState.Flashing;
+        }
+
+        /// <summary>
         /// Flash a compiled firmware to a device
         /// A return of true only means it was sent to the device, not that flash is successful
         /// </summary>
         /// <param name="firmwareStream">Stream of compiled binary</param>
         /// <param name="filename">Filename of compiled binary</param>
+        /// <param name="monitorStatus">Whether or not to monitor status</param>
         /// <returns>Returns true if binary is sent to device</returns>
-        public async Task<bool> FlashBinaryAsync(Stream firmwareStream, string filename)
+        public async Task<bool> FlashBinaryAsync(Stream firmwareStream, string filename, bool monitorStatus = true)
         {
             if (firmwareStream == null)
                 throw new ArgumentNullException(nameof(firmwareStream));
 
             try
             {
-                isFlashing = true;
+                IsFlashing = true;
                 State = ParticleDeviceState.Flashing;
-                onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent);
+                if (monitorStatus)
+                    MonitorForOnlineEvent();
                 await particleCloud.DeviceFlashBinaryAsync(this, firmwareStream, filename);
                 return true;
             }
             catch
             {
-                isFlashing = false;
+                IsFlashing = false;
                 State = ParticleDeviceState.Unknown;
                 return false;
             }
@@ -330,8 +356,9 @@ namespace Particle.SDK
         /// A return of true only means it was sent to the device, not that flash is successful
         /// </summary>
         /// <param name="app">Known app name by Particle Cloud</param>
+        /// <param name="monitorStatus">Whether or not to monitor status</param>
         /// <returns>Returns true if known app is sent to device</returns>
-        public async Task<bool> FlashKnownAppAsync(string app)
+        public async Task<bool> FlashKnownAppAsync(string app, bool monitorStatus = false)
         {
             if (string.IsNullOrWhiteSpace(app))
                 throw new ArgumentNullException(nameof(app));
@@ -343,15 +370,16 @@ namespace Particle.SDK
 
             try
             {
-                isFlashing = true;
+                IsFlashing = true;
                 State = ParticleDeviceState.Flashing;
-                onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent);
+                if (monitorStatus)
+                    MonitorForOnlineEvent();
                 var responseContent = await particleCloud.PutDataAsync($"{ParticleCloud.ParticleApiVersion}/{ParticleCloud.ParticleApiPathDevices}/{Id}", data);
                 return true;
             }
             catch
             {
-                isFlashing = false;
+                IsFlashing = false;
                 State = ParticleDeviceState.Unknown;
                 return false;
             }
@@ -626,6 +654,15 @@ namespace Particle.SDK
         #region Private Methods
 
         /// <summary>
+        /// Start monitoring for an Online event
+        /// </summary>
+        public async void MonitorForOnlineEvent()
+        {
+            if (onlineEventListenerID == null)
+                onlineEventListenerID = await SubscribeToDeviceEventsWithPrefixAsync(CheckForOnlineEvent, "spark");
+        }
+
+        /// <summary>
         /// Update this device with new values from a ParticleDeviceResponse
         /// </summary>
         /// <param name="deviceState">Updated ParticleDeviceResponse</param>
@@ -672,10 +709,14 @@ namespace Particle.SDK
         {
             if (particeEvent.Name.Equals("spark/status") && particeEvent.Data.Equals("online"))
             {
-                UnsubscribeFromEvent(onlineEventListenerID);
-                isFlashing = false;
+                Guid tempOnlineEventListenerID = onlineEventListenerID.Value;
+                onlineEventListenerID = null;
+
+                UnsubscribeFromEvent(tempOnlineEventListenerID);
+
                 particleCloud.SynchronizationContextPost(async a =>
                 {
+                    IsFlashing = false;
                     UpdateState();
                     await RefreshAsync();
                 }, null);
@@ -698,8 +739,11 @@ namespace Particle.SDK
         /// </summary>
         private void UpdateState()
         {
-            if (isFlashing)
+            if (IsFlashing)
+            {
+                State = ParticleDeviceState.Flashing;
                 return;
+            }
 
             if (!Connected)
             {
