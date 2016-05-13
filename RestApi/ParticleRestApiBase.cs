@@ -176,7 +176,7 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="request">HttpRequestMessage with path and method</param>
         /// <returns>Retuns string response from Particle Cloud request</returns>
-        protected virtual Task<string> SendAsync(object request)
+        protected virtual Task<string> SendAsync(object request, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -242,7 +242,7 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal virtual Task<string> PostDataAsync(string path)
+        internal virtual Task<string> PostDataAsync(string path, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -253,7 +253,7 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal virtual Task<string> PostDataAsync(string path, Dictionary<string, string> data = null)
+        internal virtual Task<string> PostDataAsync(string path, Dictionary<string, string> data = null, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -264,7 +264,7 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="content">Content to send in request</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal virtual Task<string> PostDataAsync(string path, object content = null)
+        internal virtual Task<string> PostDataAsync(string path, object content = null, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -274,7 +274,7 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal virtual Task<string> PutDataAsync(string path)
+        internal virtual Task<string> PutDataAsync(string path, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -285,7 +285,7 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal virtual Task<string> PutDataAsync(string path, Dictionary<string, string> data = null)
+        internal virtual Task<string> PutDataAsync(string path, Dictionary<string, string> data = null, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }
@@ -296,7 +296,7 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="content">Content to send in request</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal virtual Task<string> PutDataAsync(string path, object content = null)
+        internal virtual Task<string> PutDataAsync(string path, object content = null, bool sendAuthHeader = false)
         {
             throw new NotImplementedException();
         }

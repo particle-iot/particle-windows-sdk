@@ -102,14 +102,12 @@ namespace Particle.SDK
                 {"grant_type", "password"},
                 {"username", username},
                 {"password", password},
-                {"expires_in", expiresIn.ToString()},
-                {"client_id", OAuthClientId},
-                {"client_secret", OAuthClientSecret}
+                {"expires_in", expiresIn.ToString()}
             };
 
             try
             {
-                var responseContent = await PostDataAsync(ParticleApiPahtLogin, data);
+                var responseContent = await PostDataAsync(ParticleApiPahtLogin, data, true);
                 var results = JsonConvert.DeserializeObject<ParticleAuthenticationResponse>(responseContent);
                 if (results != null && !string.IsNullOrWhiteSpace(results.AccessToken))
                     return results;
@@ -362,7 +360,7 @@ namespace Particle.SDK
                     if (device.Connected)
                         await device.RefreshAsync();
                 }
-                
+
                 return new List<ParticleDevice>(devices);
             }
             catch

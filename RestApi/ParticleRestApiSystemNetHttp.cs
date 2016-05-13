@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Particle.SDK.RestApi
@@ -72,10 +73,13 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="request">HttpRequestMessage with path and method</param>
         /// <returns>Retuns string response from Particle Cloud request</returns>
-        protected async Task<string> SendAsync(HttpRequestMessage request)
+        protected async Task<string> SendAsync(HttpRequestMessage request, bool sendAuthHeader = false)
         {
             using (HttpClient client = new HttpClient())
             {
+                if (sendAuthHeader)
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{OAuthClientId}:{OAuthClientSecret}")));
+
                 client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
                 var response = await client.SendAsync(request);
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -83,6 +87,7 @@ namespace Particle.SDK.RestApi
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.OK:
+                    case HttpStatusCode.Created:
                         return responseContent;
 
                     case HttpStatusCode.Unauthorized:
@@ -192,10 +197,10 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal override async Task<string> PostDataAsync(string path)
+        internal override async Task<string> PostDataAsync(string path, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         /// <summary>
@@ -204,13 +209,13 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal override async Task<string> PostDataAsync(string path, Dictionary<string, string> data = null)
+        internal override async Task<string> PostDataAsync(string path, Dictionary<string, string> data = null, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
             if (data != null)
                 request.Content = new FormUrlEncodedContent(data);
 
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         /// <summary>
@@ -219,11 +224,11 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="content">IHttpContent to send in request</param>
         /// <returns>Retuns string response from Particle Cloud POST request</returns>
-        internal async Task<string> PostDataAsync(string path, HttpContent content = null)
+        internal async Task<string> PostDataAsync(string path, HttpContent content = null, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, CreateUriFromPathString(path));
             request.Content = content;
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         /// <summary>
@@ -231,10 +236,10 @@ namespace Particle.SDK.RestApi
         /// </summary>
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal override async Task<string> PutDataAsync(string path)
+        internal override async Task<string> PutDataAsync(string path, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         /// <summary>
@@ -243,13 +248,13 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="data">Dictonary of key/value pairs to convert to form url encoded content</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal override async Task<string> PutDataAsync(string path, Dictionary<string, string> data = null)
+        internal override async Task<string> PutDataAsync(string path, Dictionary<string, string> data = null, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
             if (data != null)
                 request.Content = new FormUrlEncodedContent(data);
 
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         /// <summary>
@@ -258,11 +263,11 @@ namespace Particle.SDK.RestApi
         /// <param name="path">Relative path to Particle Cloud endpoint</param>
         /// <param name="content">IHttpContent to send in request</param>
         /// <returns>Retuns string response from Particle Cloud PUT request</returns>
-        internal async Task<string> PutDataAsync(string path, HttpContent content = null)
+        internal async Task<string> PutDataAsync(string path, HttpContent content = null, bool sendAuthHeader = false)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, CreateUriFromPathString(path));
             request.Content = content;
-            return await SendAsync(request);
+            return await SendAsync(request, sendAuthHeader);
         }
 
         #endregion
