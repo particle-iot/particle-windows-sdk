@@ -7,6 +7,8 @@ namespace Particle.SDK.Models
     /// </summary>
     internal class ParticleGenericResponse
     {
+        [JsonProperty("code")]
+        public int Code { get; set; }
         [JsonProperty("ok")]
         public bool Ok { get; set; }
         [JsonProperty("message")]
