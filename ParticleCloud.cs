@@ -441,7 +441,7 @@ namespace Particle.SDK
                 string path = string.Format(ParticleApiPathCustomerPasswordReset, organizationSlug);
                 var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data);
                 var results = JsonConvert.DeserializeObject<ParticleGenericResponse>(responseContent);
-                if (results != null && results.Ok)
+                if (results != null && results.Code == 200)
                 {
                     return true;
                 }
