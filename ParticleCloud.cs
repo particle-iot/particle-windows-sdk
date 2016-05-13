@@ -28,6 +28,9 @@ namespace Particle.SDK
         internal static readonly string ParticleApiPathEvents = "events";
         internal static readonly string ParticleApiPathDevicesEvents = "devices/events";
         internal static readonly string ParticleApiPathDeviceEvents = "devices/{0}/events";
+        internal static readonly string ParticleApiPathCustomerSignup = "orgs/{0}/customers";
+        internal static readonly string ParticleApiPathCustomerPasswordReset = "orgs/{0}/customers/reset_password";
+        internal static readonly string ParticleApiPathOrganizationClaimCode = "orgs/{0}/products/{1}/device_claims";
 
         #endregion
 
@@ -362,6 +365,119 @@ namespace Particle.SDK
                 }
 
                 return new List<ParticleDevice>(devices);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Public Organization Methods
+
+        /// <summary>
+        /// Create a new user in an organization
+        /// </summary>
+        /// <param name="organizationSlug">Organization slug</param>
+        /// <param name="email">Email of new user</param>
+        /// <param name="password">Password for new user</param>
+        /// <returns>Returns true if the new user is signed up</returns>
+        public async Task<bool> SignupWithCustomerAsync(string organizationSlug, string email, string password)
+        {
+            if (string.IsNullOrWhiteSpace(organizationSlug))
+                throw new ArgumentNullException(nameof(organizationSlug));
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentNullException(nameof(email));
+            if (string.IsNullOrWhiteSpace(password))
+                throw new ArgumentNullException(nameof(password));
+
+            var data = new Dictionary<string, string>
+            {
+                {"email", email},
+                {"password", password}
+            };
+
+            try
+            {
+                string path = string.Format(ParticleApiPathCustomerSignup, organizationSlug);
+                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data, true);
+                var results = JsonConvert.DeserializeObject<ParticleAuthenticationResponse>(responseContent);
+                if (!string.IsNullOrWhiteSpace(results.AccessToken))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Request a password reset email be sent to the user of the organization
+        /// </summary>
+        /// <param name="organizationSlug">Organization slug</param>
+        /// <param name="email">Username to request password reset for</param>
+        /// <returns>Returns true if the username exists</returns>
+        public async Task<bool> RequestPasswordResetForCustomerAsync(string organizationSlug, string email)
+        {
+            if (string.IsNullOrWhiteSpace(organizationSlug))
+                throw new ArgumentNullException(nameof(organizationSlug));
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentNullException(nameof(email));
+
+            var data = new Dictionary<string, string>
+            {
+                {"email", email}
+            };
+
+            try
+            {
+                string path = string.Format(ParticleApiPathCustomerPasswordReset, organizationSlug);
+                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data);
+                var results = JsonConvert.DeserializeObject<ParticleGenericResponse>(responseContent);
+                if (results != null && results.Ok)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Create a claim code for sending to a device in listening mode for products in an organization
+        /// </summary>
+        /// <param name="organizationSlug">Organization slug</param>
+        /// <param name="productSlug">Pruduct slug</param>
+        /// <param name="activationCode">activation code</param>
+        /// <returns>Returns a claim code</returns>
+        public async Task<string> CreateClaimCodeForOrganizationAsync(string organizationSlug, string productSlug, string activationCode = null)
+        {
+            if (string.IsNullOrWhiteSpace(productSlug))
+                throw new ArgumentNullException(nameof(productSlug));
+            if (string.IsNullOrWhiteSpace(organizationSlug))
+                throw new ArgumentNullException(nameof(organizationSlug));
+
+            var data = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(activationCode))
+                data["activation_code"] = activationCode;
+
+            try
+            {
+                string path = string.Format(ParticleApiPathOrganizationClaimCode, organizationSlug, productSlug);
+                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data);
+                var result = JToken.Parse(responseContent);
+                return (string)result["claim_code"];
             }
             catch
             {
