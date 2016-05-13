@@ -219,9 +219,18 @@ Once you've created your OAuth credentials, you can supply them to the SDK by pr
 </data>
 ```
 
+If you aren't creating a Windows Store app and/or not using string resources you can manually set the values. Make sure you do this before calling any other functions.
+
+```cs
+ParticleCloud.SharedCloud.OAuthClientId  = "(client ID string goes here)";
+ParticleCloud.SharedCloud.OAuthClientSecret  = "(client secret 40-char hex string goes here)";
+```
+
 ## Installation
 
-- Currently this is built using the .NET Framework 4.6
+- There are two versions of the library:
+ - **portable46-win81+wpa81**: Portable .NET Framework 4.6 for use in Windows Runtime (WinRT) applications (Windows 8.1+ and Windows Phone 8.1+)
+ - **net452**: .NET 4.5.2 Framework for use in Windows Console, ASP.NET and Windows Forms Applications
 - Any edition of Microsoft Visual Studio 2015 (Other build systems may also work, but are not officially supported.)
 - You can use either C# or VB
 
@@ -231,7 +240,7 @@ You can either [download Particle Windows Cloud SDK](https://github.com/spark/pa
 
 ## Communication
 
-- If you **need help**, use [Our community website](http://community.particle.io), use the `Mobile` category for dicussion/troubleshooting Windows apps using the Particle Windows Cloud SDK.
+- If you **need help**, use [Our community website](http://community.particle.io), use the `Mobile` category for discussion/troubleshooting Windows apps using the Particle Windows Cloud SDK.
 - If you are certain you **found a bug**, _and can provide steps to reliably reproduce it_, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/bug).
 - If you **have a feature request**, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/enhancement).
 - If you **want to contribute**, submit a pull request, be sure to check out spark.github.io for our contribution guidelines, and please sign the [CLA](https://docs.google.com/a/particle.io/forms/d/1_2P-vRKGUFg5bmpcKLHO_qNZWGi5HKYnfrrkd-sbZoA/viewform).
