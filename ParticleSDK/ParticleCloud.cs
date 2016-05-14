@@ -461,21 +461,17 @@ namespace Particle.SDK
         /// <param name="productSlug">Pruduct slug</param>
         /// <param name="activationCode">activation code</param>
         /// <returns>Returns a claim code</returns>
-        public async Task<string> CreateClaimCodeForOrganizationAsync(string organizationSlug, string productSlug, string activationCode = null)
+        public async Task<string> CreateClaimCodeForOrganizationAsync(string organizationSlug, string productSlug)
         {
             if (string.IsNullOrWhiteSpace(productSlug))
                 throw new ArgumentNullException(nameof(productSlug));
             if (string.IsNullOrWhiteSpace(organizationSlug))
                 throw new ArgumentNullException(nameof(organizationSlug));
 
-            var data = new Dictionary<string, string>();
-            if (!string.IsNullOrWhiteSpace(activationCode))
-                data["activation_code"] = activationCode;
-
             try
             {
                 string path = string.Format(ParticleApiPathOrganizationClaimCode, organizationSlug, productSlug);
-                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data);
+                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}");
                 var result = JToken.Parse(responseContent);
                 return (string)result["claim_code"];
             }
