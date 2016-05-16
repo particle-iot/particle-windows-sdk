@@ -5,7 +5,7 @@ Particle Windows Cloud SDK adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [0.1.0](https://github.com/spark/particle-windows-sdk/tag/v0.1.0) (2016-05-16)
+## [0.1.0](https://github.com/spark/particle-windows-sdk/releases/tag/v0.1.0) (2016-05-16)
 
 * Add .NET Framework 4.5.2 library for use in non WinRT applications
 * `ParticleCloud`
