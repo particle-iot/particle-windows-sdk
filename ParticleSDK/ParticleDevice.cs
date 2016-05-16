@@ -616,7 +616,7 @@ namespace Particle.SDK
                 case ParticleDeviceType.DigistumpOak:
                     return "Digistump Oak";
                 case ParticleDeviceType.RedBearDuo:
-                    return "Red Bear Duo";
+                    return "RedBear Duo";
                 case ParticleDeviceType.BluzDK:
                     return "Bluz DK";
                 default:
