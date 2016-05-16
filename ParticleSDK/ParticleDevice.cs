@@ -329,7 +329,7 @@ namespace Particle.SDK
         /// <param name="filename">Filename of compiled binary</param>
         /// <param name="monitorStatus">Whether or not to monitor status</param>
         /// <returns>Returns true if binary is sent to device</returns>
-        public async Task<bool> FlashBinaryAsync(Stream firmwareStream, string filename, bool monitorStatus = true)
+        public async Task<bool> FlashBinaryAsync(Stream firmwareStream, string filename, bool monitorStatus = false)
         {
             if (firmwareStream == null)
                 throw new ArgumentNullException(nameof(firmwareStream));
