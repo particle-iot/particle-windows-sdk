@@ -4,6 +4,9 @@
 
 ## Introduction
 
+[![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/spark/particle-windows-sdk/blob/master/LICENSE)
+[![NuGet Version](http://img.shields.io/nuget/v/Particle.SDK.svg?style=flat)](https://www.nuget.org/packages/Particle.SDK/)
+
 Particle Windows Cloud SDK enables Windows apps to interact with Particle-powered connected products via the Particle Cloud. It's an easy-to-use wrapper for Particle REST API. The Cloud SDK will allow you to:
 
 - Manage user sessions for the Particle Cloud (access tokens, encrypted session management)
