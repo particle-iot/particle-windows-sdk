@@ -19,7 +19,7 @@ namespace Particle.SDK.Utils
             "spark", "station", "tasty", "trochee", "turkey", "turtle", "vampire", "wombat",
             "zombie"};
 
-        public static string GenerateUniqueName(HashSet<string> existingNames)
+        public static string GenerateUniqueName(HashSet<string> existingNames = null)
         {
             string uniqueName = null;
             while (uniqueName == null)
@@ -27,7 +27,11 @@ namespace Particle.SDK.Utils
                 string part1 = GetRandomName();
                 string part2 = GetRandomName();
                 string candidate = part1 + "_" + part2;
-                if (!existingNames.Contains(candidate) && !part1.Equals(part2))
+                if (part1.Equals(part2))
+                    continue;
+                else if (existingNames == null)
+                    uniqueName = candidate;
+                else if (!existingNames.Contains(candidate))
                     uniqueName = candidate;
             }
             return uniqueName;
