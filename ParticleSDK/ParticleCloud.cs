@@ -405,6 +405,9 @@ namespace Particle.SDK
                 var results = JsonConvert.DeserializeObject<ParticleAuthenticationResponse>(responseContent);
                 if (!string.IsNullOrWhiteSpace(results.AccessToken))
                 {
+                    particleAuthentication = results;
+                    logedInUsername = email;
+
                     return true;
                 }
                 else
