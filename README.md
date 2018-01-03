@@ -2,7 +2,7 @@
 
 # Particle Windows Cloud SDK
 
-[![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/spark/particle-windows-sdk/blob/master/LICENSE)
+[![license](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/particle-iot/particle-windows-sdk/blob/master/LICENSE)
 [![NuGet Version](http://img.shields.io/nuget/v/Particle.SDK.svg?style=flat)](https://www.nuget.org/packages/Particle.SDK/)
 
 ## Introduction
@@ -20,7 +20,7 @@ All cloud operations take place asynchronously and return a *System.Threading.Ta
 
 ## Beta notice
 
-This SDK is still under development and is currently released as Beta and over the next few months may go under considerable changes. Although tested, bugs and issues may be present. Some code might require cleanup. In addition, until version 1.0 is released, we cannot guarantee that API calls will not break from one Cloud SDK version to the next. Be sure to consult the [Change Log](https://github.com/spark/particle-windows-sdk/blob/master/CHANGELOG.md) for any breaking changes / additions to the SDK.
+This SDK is still under development and is currently released as Beta and over the next few months may go under considerable changes. Although tested, bugs and issues may be present. Some code might require cleanup. In addition, until version 1.0 is released, we cannot guarantee that API calls will not break from one Cloud SDK version to the next. Be sure to consult the [Change Log](https://github.com/particle-iot/particle-windows-sdk/blob/master/CHANGELOG.md) for any breaking changes / additions to the SDK.
 
 ## Getting started
 
@@ -29,7 +29,7 @@ This SDK is still under development and is currently released as Beta and over t
 
 ## Usage
 
-Cloud SDK usage involves two basic classes: first is [`ParticleCloud`](https://github.com/spark/particle-windows-sdk/blob/master/ParticleCloud.cs) which is an object that enables all basic cloud operations such as user authentication, device listing, claiming etc. Second class is [`ParticleDevice`](https://github.com/spark/particle-windows-sdk/blob/master/ParticleDevice.cs) which is an instance representing a claimed device in the current user session. Each object enables device-specific operation such as: getting its info, invoking functions and reading variables from it.
+Cloud SDK usage involves two basic classes: first is [`ParticleCloud`](https://github.com/particle-iot/particle-windows-sdk/blob/master/ParticleCloud.cs) which is an object that enables all basic cloud operations such as user authentication, device listing, claiming etc. Second class is [`ParticleDevice`](https://github.com/particle-iot/particle-windows-sdk/blob/master/ParticleDevice.cs) which is an instance representing a claimed device in the current user session. Each object enables device-specific operation such as: getting its info, invoking functions and reading variables from it.
 
 ## SDK calls from the UI thread
 
@@ -237,15 +237,15 @@ ParticleCloud.SharedCloud.OAuthClientSecret  = "(client secret 40-char hex strin
 - Any edition of Microsoft Visual Studio 2015 (Other build systems may also work, but are not officially supported.)
 - You can use either C# or VB
 
-You can either [download Particle Windows Cloud SDK](https://github.com/spark/particle-windows-sdk/archive/master.zip) or install using [NuGet](http://www.nuget.org/packages/Particle.SDK)
+You can either [download Particle Windows Cloud SDK](https://github.com/particle-iot/particle-windows-sdk/archive/master.zip) or install using [NuGet](http://www.nuget.org/packages/Particle.SDK)
 
 `PM> Install-Package Particle.SDK`
 
 ## Communication
 
 - If you **need help**, use [Our community website](http://community.particle.io), use the `Mobile` category for discussion/troubleshooting Windows apps using the Particle Windows Cloud SDK.
-- If you are certain you **found a bug**, _and can provide steps to reliably reproduce it_, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/bug).
-- If you **have a feature request**, [open an issue on GitHub](https://github.com/spark/particle-windows-sdk/labels/enhancement).
+- If you are certain you **found a bug**, _and can provide steps to reliably reproduce it_, [open an issue on GitHub](https://github.com/particle-iot/particle-windows-sdk/labels/bug).
+- If you **have a feature request**, [open an issue on GitHub](https://github.com/particle-iot/particle-windows-sdk/labels/enhancement).
 - If you **want to contribute**, submit a pull request, be sure to check out spark.github.io for our contribution guidelines, and please sign the [CLA](https://docs.google.com/a/particle.io/forms/d/1_2P-vRKGUFg5bmpcKLHO_qNZWGi5HKYnfrrkd-sbZoA/viewform).
 
 ## Maintainers
@@ -255,4 +255,4 @@ You can either [download Particle Windows Cloud SDK](https://github.com/spark/pa
 
 ## License
 
-Particle Windows Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/spark/particle-windows-sdk/blob/master/LICENSE) for more info.
+Particle Windows Cloud SDK is available under the Apache License 2.0. See the [LICENSE file](https://github.com/particle-iot/particle-windows-sdk/blob/master/LICENSE) for more info.

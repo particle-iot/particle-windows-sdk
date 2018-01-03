@@ -6,8 +6,8 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://github.com/spark/particle-windows-sdk/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/spark/particle-windows-sdk</projectUrl>
+    <licenseUrl>https://github.com/particle-iot/particle-windows-sdk/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/particle-iot/particle-windows-sdk</projectUrl>
     <iconUrl>https://secure.gravatar.com/avatar/41d69da42a30b02153710eb33a186ad7?s=64</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
