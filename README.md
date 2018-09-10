@@ -233,8 +233,8 @@ ParticleCloud.SharedCloud.OAuthClientSecret  = "(client secret 40-char hex strin
 
 - There are two versions of the library:
  - **portable46-win81+wpa81**: Portable .NET Framework 4.6 for use in Windows Runtime (WinRT) applications (Windows 8.1+ and Windows Phone 8.1+)
- - **net452**: .NET 4.5.2 Framework for use in Windows Console, ASP.NET and Windows Forms Applications
-- Any edition of Microsoft Visual Studio 2015 (Other build systems may also work, but are not officially supported.)
+ - **netcorestandard**: .NET Core Standard (2.0) Framework for use in full .NetFramework, .Net Core, Mono, Xamarin, UWP (https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+- Any edition of Microsoft Visual Studio 2017 (Other build systems may also work, but are not officially supported.)
 - You can use either C# or VB
 
 You can either [download Particle Windows Cloud SDK](https://github.com/spark/particle-windows-sdk/archive/master.zip) or install using [NuGet](http://www.nuget.org/packages/Particle.SDK)
