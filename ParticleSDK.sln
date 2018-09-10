@@ -1,14 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particle.SDK.net452", "ParticleSDK\Particle.SDK.net452.csproj", "{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particle.SDK.win81+wpa81", "ParticleSDK\Particle.SDK.win81+wpa81.csproj", "{DC5F6004-31B8-4E9A-B034-4F163905E54E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5} = {F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}
-	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Particle.SDK.netcorestandard", "ParticleSDK\Particle.SDK.netcorestandard.csproj", "{6CD84312-68C1-4293-9320-C8E83D410936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,16 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9AEAC94-1259-4C0D-8DD1-FC15457F9DD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC5F6004-31B8-4E9A-B034-4F163905E54E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD84312-68C1-4293-9320-C8E83D410936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD84312-68C1-4293-9320-C8E83D410936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD84312-68C1-4293-9320-C8E83D410936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD84312-68C1-4293-9320-C8E83D410936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D37C7006-732B-4C2D-B98C-75939D844F5A}
 	EndGlobalSection
 EndGlobal
