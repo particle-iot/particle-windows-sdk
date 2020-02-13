@@ -1,4 +1,4 @@
-<p align="center" ><img src="http://oi60.tinypic.com/116jd51.jpg" alt="Particle" title="Particle"></p>
+<p align="center" ><img src="https://avatars0.githubusercontent.com/u/2348966?s=200&v=4" alt="Particle" title="Particle"></p>
 
 # Particle Windows Cloud SDK
 

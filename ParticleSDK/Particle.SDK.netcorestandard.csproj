@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RestApi\ParticleRestApiWindowsWebHttp.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="packages.config" />
-    <None Remove="Particle.SDK.win81+wpa81.nuspec" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
