@@ -16,7 +16,7 @@ Particle Windows Cloud SDK enables Windows apps to interact with Particle-powere
 - Invoke functions on devices
 - Publish events and subscribe to events coming from devices
 
-All cloud operations take place asynchronously and return a *System.Threading.Tasks.Task* allowing you to build beautiful responsive apps for your Particle products and projects. Windows Cloud SDK is implemented as an open-source .NET Portable Class Library. See [Installation](#installation) section for more details. It works well for both C# and VB projects.
+All cloud operations take place asynchronously and return a *System.Threading.Tasks.Task* allowing you to build beautiful responsive apps for your Particle products and projects. Windows Cloud SDK is implemented as an open-source .NET Standard Class Library. See [Installation](#installation) section for more details.
 
 ## Beta notice
 
@@ -230,11 +230,8 @@ ParticleCloud.SharedCloud.OAuthClientSecret  = "(client secret 40-char hex strin
 ```
 
 ## Installation
-
-- There are two versions of the library:
- - **portable46-win81+wpa81**: Portable .NET Framework 4.6 for use in Windows Runtime (WinRT) applications (Windows 8.1+ and Windows Phone 8.1+)
- - **netcorestandard**: .NET Core Standard (2.0) Framework for use in full .NetFramework, .Net Core, Mono, Xamarin, UWP (https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
-- Any edition of Microsoft Visual Studio 2017 (Other build systems may also work, but are not officially supported.)
+- .NET Standard 2.1 Framework for use in full .NetFramework, .Net Core, Mono, Xamarin, UWP (https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+- Any edition of Microsoft Visual Studio 2017 or 2019 (Other build systems may also work, but are not officially supported.)
 - You can use either C# or VB
 
 You can either [download Particle Windows Cloud SDK](https://github.com/spark/particle-windows-sdk/archive/master.zip) or install using [NuGet](http://www.nuget.org/packages/Particle.SDK)
