@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Particle.SDK", "ParticleSDK\Particle.SDK.csproj", "{1ACF0AEC-59BB-47BC-9BBA-62791428092C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleConsoleTest", "ParticleConsoleTest\ParticleConsoleTest.csproj", "{158C6812-F762-42A6-BAEA-D9DFB7EFB941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1ACF0AEC-59BB-47BC-9BBA-62791428092C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ACF0AEC-59BB-47BC-9BBA-62791428092C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ACF0AEC-59BB-47BC-9BBA-62791428092C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{158C6812-F762-42A6-BAEA-D9DFB7EFB941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{158C6812-F762-42A6-BAEA-D9DFB7EFB941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{158C6812-F762-42A6-BAEA-D9DFB7EFB941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{158C6812-F762-42A6-BAEA-D9DFB7EFB941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

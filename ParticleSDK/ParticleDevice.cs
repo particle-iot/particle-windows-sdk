@@ -450,6 +450,38 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Get last vitals
+        /// </summary>
+        /// <returns>Returns last vitals or null if there are none</returns>
+        public async Task<ParticleDeviceVitalsResponse> GetLastKnownVitals()
+        {
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() 
+                { 
+                    DateTimeZoneHandling = DateTimeZoneHandling.Local,
+                    Error = (sender, args) =>
+                    {
+                        if (System.Diagnostics.Debugger.IsAttached)
+                        {
+                            System.Diagnostics.Debugger.Break();
+                        }
+                    }
+                };
+
+                string path = string.Format(ParticleCloud.ParticleApiPathDiagnosticsLast, Id);
+                var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{path}");
+                ParticleDeviceVitalsResponse vitals = JsonConvert.DeserializeObject<ParticleDeviceVitalsResponse>(responseContent, jsonSerializerSettings);
+                
+                return vitals;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Rename a device
         /// </summary>
         /// <param name="name">New neame for device</param>
