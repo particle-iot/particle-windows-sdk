@@ -16,6 +16,16 @@ namespace Particle.SDK.RestApi
     /// </summary>
     public class ParticleRestApi : ParticleRestApiBase
     {
+        #region Protected variables
+        HttpClient _client;
+        #endregion
+
+        public ParticleRestApi()
+        {
+            _client = new HttpClient();
+            _client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
+        }
+
         #region Public Device Method Overrides
 
         /// <summary>
@@ -75,35 +85,31 @@ namespace Particle.SDK.RestApi
         /// <returns>Retuns string response from Particle Cloud request</returns>
         protected async Task<string> SendAsync(HttpRequestMessage request, bool sendAuthHeader = false)
         {
-            using (HttpClient client = new HttpClient())
+            if (sendAuthHeader)
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{OAuthClientId}:{OAuthClientSecret}")));
+
+            //SendAsync is threadsafe and will pool connections, to allow unlimited API requests
+            var response = await _client.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            switch (response.StatusCode)
             {
-                if (sendAuthHeader)
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{OAuthClientId}:{OAuthClientSecret}")));
+                case HttpStatusCode.OK:
+                case HttpStatusCode.Created:
+                    return responseContent;
 
-                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
-                var response = await client.SendAsync(request);
-                var responseContent = await response.Content.ReadAsStringAsync();
+                case HttpStatusCode.Unauthorized:
+                    OnClientUnauthorized();
+                    throw new ParticleUnauthorizedException(responseContent);
 
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.OK:
-                    case HttpStatusCode.Created:
-                        return responseContent;
+                case HttpStatusCode.NotFound:
+                    throw new ParticleNotFoundException(responseContent);
 
-                    case HttpStatusCode.Unauthorized:
-                        OnClientUnauthorized();
-                        throw new ParticleUnauthorizedException(responseContent);
+                case HttpStatusCode.BadRequest:
+                    throw new ParticleRequestBadRequestException(responseContent);
 
-                    case HttpStatusCode.NotFound:
-                        throw new ParticleNotFoundException(responseContent);
-
-                    case HttpStatusCode.BadRequest:
-                        throw new ParticleRequestBadRequestException(responseContent);
-
-                    default:
-                        throw new Exception();
-                }
-
+                default:
+                    throw new Exception();
             }
         }
 

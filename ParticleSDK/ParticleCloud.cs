@@ -18,7 +18,7 @@ namespace Particle.SDK
 
         internal static readonly string ParticleApiVersion = "v1";
 
-        internal static readonly string ParticleApiPahtLogin = "oauth/token";
+        internal static readonly string ParticleApiPathLogin = "oauth/token";
         internal static readonly string ParticleApiPathSignup = "users";
         internal static readonly string ParticleApiPathPasswordReset = "user/password-reset";
         internal static readonly string ParticleApiPathUser = "user";
@@ -31,6 +31,8 @@ namespace Particle.SDK
         internal static readonly string ParticleApiPathCustomerSignup = "orgs/{0}/customers";
         internal static readonly string ParticleApiPathCustomerPasswordReset = "orgs/{0}/customers/reset_password";
         internal static readonly string ParticleApiPathOrganizationClaimCode = "orgs/{0}/products/{1}/device_claims";
+        internal static readonly string ParticleApiPathDiagnostics = "diagnostics";
+        internal static readonly string ParticleApiPathDiagnosticsLast = "diagnostics/{0}/last";
 
         #endregion
 
@@ -110,7 +112,7 @@ namespace Particle.SDK
 
             try
             {
-                var responseContent = await PostDataAsync(ParticleApiPahtLogin, data, true);
+                var responseContent = await PostDataAsync(ParticleApiPathLogin, data, true);
                 var results = JsonConvert.DeserializeObject<ParticleAuthenticationResponse>(responseContent);
                 if (results != null && !string.IsNullOrWhiteSpace(results.AccessToken))
                     return results;
