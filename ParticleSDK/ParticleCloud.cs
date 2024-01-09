@@ -33,6 +33,7 @@ namespace Particle.SDK
         internal static readonly string ParticleApiPathOrganizationClaimCode = "orgs/{0}/products/{1}/device_claims";
         internal static readonly string ParticleApiPathDiagnostics = "diagnostics";
         internal static readonly string ParticleApiPathDiagnosticsLast = "diagnostics/{0}/last";
+        internal static readonly string ParticleApiPathProductDevices = "products/{0}/devices";
 
         #endregion
 
@@ -360,10 +361,35 @@ namespace Particle.SDK
                     devices.Add(particleDevice);
                 }
 
-                foreach (ParticleDevice device in devices)
+                return new List<ParticleDevice>(devices);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of all devices in product
+        /// </summary>
+        /// <returns>Returns a List of ParticleDevices</returns>
+        public async Task<List<ParticleDevice>> GetDevicesInProductAsync(int productId)
+        {
+            try
+            {
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+
+                string path = string.Format(ParticleApiPathProductDevices, productId);
+                var responseContent = await GetDataAsync($"{ParticleApiVersion}/{path}");
+                var result = JToken.Parse(responseContent);
+
+                List<ParticleDevice> devices = new List<ParticleDevice>();
+                foreach (JObject device in (JArray)result["devices"])
                 {
-                    if (device.Connected)
-                        await device.RefreshAsync();
+                    ParticleDeviceResponse deviceState = device.ToObject<ParticleDeviceResponse>(jsonSerializer);
+                    ParticleDevice particleDevice = new ParticleDevice(deviceState, this);
+                    devices.Add(particleDevice);
                 }
 
                 return new List<ParticleDevice>(devices);

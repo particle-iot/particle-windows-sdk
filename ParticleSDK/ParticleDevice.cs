@@ -143,11 +143,11 @@ namespace Particle.SDK
         }
 
         /// <summary>
-        /// Readonly Connected from ParticleDeviceResponse
+        /// Readonly Online from ParticleDeviceResponse
         /// </summary>
-        public bool Connected
+        public bool Online
         {
-            get { return deviceState.Connected; }
+            get { return deviceState.Online; }
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Particle.SDK
             }
             string[] tinkerFunctions = { "digitalread", "digitalwrite", "analogread", "analogwrite" };
 
-            return (Connected && !tinkerFunctions.Except(lowercaseFunctions).Any());
+            return (Online && !tinkerFunctions.Except(lowercaseFunctions).Any());
         }
 
         /// <summary>
@@ -459,14 +459,7 @@ namespace Particle.SDK
             {
                 var jsonSerializerSettings = new JsonSerializerSettings() 
                 { 
-                    DateTimeZoneHandling = DateTimeZoneHandling.Local,
-                    Error = (sender, args) =>
-                    {
-                        if (System.Diagnostics.Debugger.IsAttached)
-                        {
-                            System.Diagnostics.Debugger.Break();
-                        }
-                    }
+                    DateTimeZoneHandling = DateTimeZoneHandling.Local
                 };
 
                 string path = string.Format(ParticleCloud.ParticleApiPathDiagnosticsLast, Id);
@@ -475,7 +468,7 @@ namespace Particle.SDK
                 
                 return vitals;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -777,7 +770,7 @@ namespace Particle.SDK
                 return;
             }
 
-            if (!Connected)
+            if (!Online)
             {
                 State = ParticleDeviceState.Offline;
             }
