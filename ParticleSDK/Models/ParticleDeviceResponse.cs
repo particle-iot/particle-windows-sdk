@@ -23,8 +23,8 @@ namespace Particle.SDK.Models
         public bool RequiresDeepUpdate { get; internal set; }
         [JsonProperty("product_id")]
         public int ProductId { get; internal set; }
-        [JsonProperty("connected")]
-        public bool Connected { get; internal set; }
+        [JsonProperty("online")]
+        public bool Online { get; internal set; }
         [JsonProperty("platform_id")]
         public int PlatformId { get; internal set; }
         [JsonProperty("cellular")]
