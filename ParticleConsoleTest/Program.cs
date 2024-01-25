@@ -24,9 +24,9 @@ namespace ParticleConsoleTest
 
             await ParticleCloud.SharedCloud.TokenLoginAsync(AuthToken);
 
-            /*ParticleDevice particleDevice = await ParticleCloud.SharedCloud.GetDeviceAsync(DeviceId);
-            ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();*/
-            List<ParticleDevice> devices = await ParticleCloud.SharedCloud.GetDevicesInProductAsync(productId);
+            ParticleDevice particleDevice = await ParticleCloud.SharedCloud.GetDeviceAsync(DeviceId);
+            ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();
+            //List<ParticleDevice> devices = await ParticleCloud.SharedCloud.GetDevicesInProductAsync(productId);
         }
     }
 }
