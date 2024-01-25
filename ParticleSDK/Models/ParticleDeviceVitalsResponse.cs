@@ -23,14 +23,14 @@ namespace Particle.SDK.Models
     public class ParticleDeviceVitalsSignal
     {
         public string at { get;  set; }
-        public string strength { get;  set; }
+        public float strength { get;  set; }
         public string strength_units { get;  set; }
-        public string strengthv { get;  set; }
+        public int strengthv { get;  set; }
         public string strengthv_units { get;  set; }
         public string strengthv_type { get;  set; }
-        public string quality { get;  set; }
+        public float quality { get;  set; }
         public string quality_units { get;  set; }
-        public string qualityv { get;  set; }
+        public int qualityv { get;  set; }
         public string qualityv_units { get;  set; }
         public string qualityv_type { get;  set; }
     }
@@ -46,7 +46,7 @@ namespace Particle.SDK.Models
     public class ParticleDeviceVitalsNetwork
     {
         public ParticleDeviceVitalsCellular cellular { get;  set; }
-        public string ParticleDeviceVitalsSignal { get;  set; }
+        public ParticleDeviceVitalsSignal signal { get;  set; }
         public ParticleDeviceVitalsConnection connection { get;  set; }
     }
 
