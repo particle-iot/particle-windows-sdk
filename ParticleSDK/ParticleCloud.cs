@@ -340,6 +340,34 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Rename a device
+        /// </summary>
+        /// <param name="deviceId">Device ID</param>
+        /// <param name="name">name</param>
+        /// <returns>Returns a true/false</returns>
+        public async Task<bool> RenameDeviceAsync(string deviceId, string name)
+        {
+            try
+            {
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+
+                var data = new Dictionary<string, string>
+                {
+                    {"name", name}
+                };
+
+                var responseContent = await PutDataAsync($"{ParticleApiVersion}/{ParticleApiPathDevices}/{deviceId}", data);
+                var result = JToken.Parse(responseContent);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Gets a list of all users devices
         /// </summary>
         /// <returns>Returns a List of ParticleDevices</returns>
@@ -397,6 +425,34 @@ namespace Particle.SDK
             catch
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Imports a Device into a product and activates the SIM card
+        /// </summary>
+        /// <returns>Returns true/false</returns>
+        public async Task<bool> ImportDeviceInProductAsync(int productId, string deviceId, string claimUserEmail)
+        {
+            try
+            {
+                var jsonSerializer = new JsonSerializer();
+                jsonSerializer.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+
+                var data = new Dictionary<string, string>
+                {
+                    {"id", deviceId},
+                    {"claim_user", claimUserEmail}
+                };
+
+                string path = string.Format(ParticleApiPathProductDevices, productId);
+                var responseContent = await PostDataAsync($"{ParticleApiVersion}/{path}", data);
+                var result = JToken.Parse(responseContent);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 

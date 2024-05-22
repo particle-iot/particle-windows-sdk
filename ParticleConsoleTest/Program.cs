@@ -18,15 +18,17 @@ namespace ParticleConsoleTest
 
         static async Task TestVitals()
         {
-            const string AuthToken = "AuthTokenHere";
-            const string DeviceId = "DeviceIDHere";
+            const string AuthToken = "AuthToken";
+            const string DeviceId = "DeviceID";
             int productId = 0;
 
             await ParticleCloud.SharedCloud.TokenLoginAsync(AuthToken);
 
-            ParticleDevice particleDevice = await ParticleCloud.SharedCloud.GetDeviceAsync(DeviceId);
-            ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();
+            //ParticleDevice particleDevice = await ParticleCloud.SharedCloud.GetDeviceAsync(DeviceId);
+            //ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();
             //List<ParticleDevice> devices = await ParticleCloud.SharedCloud.GetDevicesInProductAsync(productId);
+            await ParticleCloud.SharedCloud.RenameDeviceAsync(DeviceId, "I renamed it");
+            //await ParticleCloud.SharedCloud.ImportDeviceInProductAsync(productId, DeviceId, "mark@lancontrolsystems.com");
         }
     }
 }
