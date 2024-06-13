@@ -24,6 +24,7 @@ namespace Particle.SDK
         internal static readonly string ParticleApiPathUser = "user";
         internal static readonly string ParticleApiPathDevices = "devices";
         internal static readonly string ParticleApiPathClaimCode = "device_claims";
+        internal static readonly string ParticleApiPathSim = "sims/{0}";
         internal static readonly string ParticleApiPathSimDataUsage = "sims/{0}/data_usage";
         internal static readonly string ParticleApiPathEvents = "events";
         internal static readonly string ParticleApiPathDevicesEvents = "devices/events";

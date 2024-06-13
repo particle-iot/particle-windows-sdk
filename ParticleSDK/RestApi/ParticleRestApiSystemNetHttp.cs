@@ -98,6 +98,7 @@ namespace Particle.SDK.RestApi
                 case HttpStatusCode.Created:
                     return responseContent;
 
+                case HttpStatusCode.Forbidden:
                 case HttpStatusCode.Unauthorized:
                     OnClientUnauthorized();
                     throw new ParticleUnauthorizedException(responseContent);

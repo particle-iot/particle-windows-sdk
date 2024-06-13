@@ -576,6 +576,48 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Get the SIM card used by this device
+        /// </summary>
+        /// <returns>true if te sim card is active</returns>
+        public async Task<ParticleSimResponse> GetSimCardAsync()
+        {
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings()
+                {
+                    DateTimeZoneHandling = DateTimeZoneHandling.Local
+                };
+
+                var particleApiPathSimDataUsage = string.Format(ParticleCloud.ParticleApiPathSim, LastICCID);
+                var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{particleApiPathSimDataUsage}");
+
+                ParticleSimResponse sim = JsonConvert.DeserializeObject<ParticleSimResponse>(responseContent, jsonSerializerSettings);
+                return sim;
+            }
+            catch
+            {
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Get if the SIM card used by this device is active
+        /// </summary>
+        /// <returns>true if te sim card is active</returns>
+        public async Task<bool> GetSimCardActiveAsync()
+        {
+            try
+            {
+                ParticleSimResponse particleSimResponse = await GetSimCardAsync();
+                return particleSimResponse.Status == "active";
+            }
+            catch
+            {
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Get the amount of megabytes used in billing period for an Electron
         /// </summary>
         /// <returns>Double value of amount of megabytes used in billing period</returns>
