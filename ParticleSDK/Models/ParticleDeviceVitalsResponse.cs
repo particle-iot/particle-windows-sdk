@@ -1,14 +1,49 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
 namespace Particle.SDK.Models
 {
+    /// <summary>
+    /// Some fields in the Particle Cloud Device Vitals response can be either a string or an object. This class handles that.
+    /// We only care about the string value, if it's an object we return null.
+    /// The object value observed is {"err":error_code} which we ignore.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    class IgnoreErrConverter<T> : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            // CanConvert is not called when the [JsonConverter] attribute is used
+            return false;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JToken token = JToken.Load(reader);
+            if (token.Type == JTokenType.Object)
+            {
+                return null;
+            }
+            return token.ToString();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            serializer.Serialize(writer, value);
+        }
+    }
+
     public class ParticleDeviceVitalsIdentity
     {
+        [JsonConverter(typeof(IgnoreErrConverter<string>))]
         public string mobile_country_code { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<string>))]
         public string mobile_network_code { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<string>))]
         public string location_area_code { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<string>))]
         public string cell_id { get;  set; }
     }
 
@@ -25,7 +60,7 @@ namespace Particle.SDK.Models
         public string at { get;  set; }
         public float strength { get;  set; }
         public string strength_units { get;  set; }
-        public int strengthv { get;  set; }
+        public float strengthv { get;  set; }
         public string strengthv_units { get;  set; }
         public string strengthv_type { get;  set; }
         public float quality { get;  set; }

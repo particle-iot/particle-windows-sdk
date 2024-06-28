@@ -465,8 +465,13 @@ namespace Particle.SDK
                 string path = string.Format(ParticleCloud.ParticleApiPathDiagnosticsLast, Id);
                 var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{path}");
                 ParticleDeviceVitalsResponse vitals = JsonConvert.DeserializeObject<ParticleDeviceVitalsResponse>(responseContent, jsonSerializerSettings);
-                
+
                 return vitals;
+
+                //Test case for when some values are "err"
+                /*var responseContent = "{\"device\":{\"network\":{\"cellular\":{\"radio_access_technology\":\"3G\",\"cell_global_identity\":{\"mobile_country_code\":{\"err\":-280},\"mobile_network_code\":{\"err\":-280},\"location_area_code\":{\"err\":-280},\"cell_id\":{\"err\":-280}}},\"signal\":{\"at\":\"UMTS\",\"strength\":100,\"strength_units\":\"%\",\"strengthv\":-84,\"strengthv_units\":\"dBm\",\"strengthv_type\":\"RSCP\",\"quality\":46.43,\"quality_units\":\"%\",\"qualityv\":-11,\"qualityv_units\":\"dB\",\"qualityv_type\":\"ECN0\"},\"connection\":{\"status\":\"connected\",\"error\":0,\"disconnects\":0,\"attempts\":1,\"disconnect_reason\":\"unknown\"},\"alternate_signal\":{\"strengthv\":{\"err\":-100},\"strength\":{\"err\":-100},\"quality\":{\"err\":-100},\"qualityv\":{\"err\":-100},\"at\":\"Wi-Fi\"}},\"cloud\":{\"connection\":{\"status\":\"connecting\",\"error\":0,\"attempts\":1,\"disconnects\":0,\"disconnect_reason\":\"none\",\"interface\":\"Cellular\"},\"coap\":{\"transmit\":10,\"retransmit\":0,\"unack\":0,\"round_trip\":772},\"publish\":{\"rate_limited\":0}},\"power\":{\"battery\":{\"charge\":46.76,\"state\":\"charging\"},\"source\":\"USB host\"},\"system\":{\"uptime\":73,\"memory\":{\"used\":238496,\"total\":3173120}}},\"service\":{\"device\":{\"status\":\"ok\"},\"cloud\":{\"uptime\":5,\"publish\":{\"sent\":2}},\"coap\":{\"round_trip\":377}}}";
+                ParticleDeviceVitalsPayload payload = JsonConvert.DeserializeObject<ParticleDeviceVitalsPayload>(responseContent, jsonSerializerSettings);
+                return null;*/
             }
             catch (Exception)
             {
