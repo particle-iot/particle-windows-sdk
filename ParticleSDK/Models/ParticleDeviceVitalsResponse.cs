@@ -63,9 +63,11 @@ namespace Particle.SDK.Models
         public float strengthv { get;  set; }
         public string strengthv_units { get;  set; }
         public string strengthv_type { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<float>))]
         public float quality { get;  set; }
         public string quality_units { get;  set; }
-        public int qualityv { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<float>))]
+        public float qualityv { get;  set; }
         public string qualityv_units { get;  set; }
         public string qualityv_type { get;  set; }
     }
