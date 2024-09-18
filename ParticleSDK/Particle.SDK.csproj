@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ParticleAuthenticationResponse.cs" />
+    <Compile Include="Models\ParticleSimResponse.cs" />
     <Compile Include="Models\ParticleDeviceVitalsResponse.cs" />
     <Compile Include="Models\ParticleDeviceResponse.cs" />
     <Compile Include="Models\ParticleEventGroup.cs" />
