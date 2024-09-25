@@ -26,7 +26,11 @@ namespace Particle.SDK.Models
             {
                 return null;
             }
-            return token.ToString();
+            if (objectType == typeof(string))
+            {
+                return token.ToString();
+            }
+            return Convert.ChangeType(reader.Value, objectType);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
