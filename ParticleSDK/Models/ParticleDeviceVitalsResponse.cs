@@ -62,8 +62,10 @@ namespace Particle.SDK.Models
     public class ParticleDeviceVitalsSignal
     {
         public string at { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<float>))]
         public float strength { get;  set; }
         public string strength_units { get;  set; }
+        [JsonConverter(typeof(IgnoreErrConverter<float>))]
         public float strengthv { get;  set; }
         public string strengthv_units { get;  set; }
         public string strengthv_type { get;  set; }
@@ -82,6 +84,8 @@ namespace Particle.SDK.Models
         public string disconnects { get;  set; }
         public string attempts { get;  set; }
         public string disconnect_reason { get;  set; }
+        [JsonProperty("interface")]
+        public string interface_used { get; set; }
     }
 
     public class ParticleDeviceVitalsNetwork
@@ -89,6 +93,7 @@ namespace Particle.SDK.Models
         public ParticleDeviceVitalsCellular cellular { get;  set; }
         public ParticleDeviceVitalsSignal signal { get;  set; }
         public ParticleDeviceVitalsConnection connection { get;  set; }
+        public ParticleDeviceVitalsSignal alternate_signal { get; set; }
     }
 
     public class ParticleDeviceVitalsCoap
