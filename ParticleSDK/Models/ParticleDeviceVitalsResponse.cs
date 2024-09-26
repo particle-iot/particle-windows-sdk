@@ -24,6 +24,11 @@ namespace Particle.SDK.Models
             JToken token = JToken.Load(reader);
             if (token.Type == JTokenType.Object)
             {
+                if (objectType == typeof(float) ||
+                    objectType == typeof(Single))
+                {
+                    return Convert.ChangeType(0, objectType);
+                }
                 return null;
             }
             if (objectType == typeof(string))
