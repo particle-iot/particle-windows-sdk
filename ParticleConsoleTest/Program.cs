@@ -27,9 +27,9 @@ namespace ParticleConsoleTest
 
             ParticleDevice particleDevice = await ParticleCloud.SharedCloud.GetDeviceAsync(DeviceId);
             ParticleSimResponse sim =  await particleDevice.GetSimCardAsync();
-            bool active  = await particleDevice.GetSimCardActiveAsync();
-            ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();
-            //List<ParticleDevice> devices = await ParticleCloud.SharedCloud.GetDevicesInProductAsync(ProductId);
+            //bool active  = await particleDevice.GetSimCardActiveAsync();
+            //ParticleDeviceVitalsResponse deviceVitals = await particleDevice.GetLastKnownVitals();
+            List<ParticleDevice> devices = await ParticleCloud.SharedCloud.GetDevicesInProductAsync(ProductId);
             //await ParticleCloud.SharedCloud.RenameDeviceAsync(DeviceId, "I renamed it");
             //await ParticleCloud.SharedCloud.ImportDeviceInProductAsync(ProductId, DeviceId, "mark@lancontrolsystems.com");
         }

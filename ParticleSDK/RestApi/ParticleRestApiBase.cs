@@ -162,7 +162,11 @@ namespace Particle.SDK.RestApi
         protected Uri CreateUriFromPathString(string path)
         {
             if (!string.IsNullOrWhiteSpace(AccessToken))
+            {
+                if (path.Contains("?"))
+                    return new Uri($"{ParticleApiUrl}{path}&access_token={AccessToken}");
                 return new Uri($"{ParticleApiUrl}{path}?access_token={AccessToken}");
+            }
             else
                 return new Uri($"{ParticleApiUrl}{path}");
         }
