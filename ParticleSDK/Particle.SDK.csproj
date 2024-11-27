@@ -53,6 +53,7 @@
     <Compile Include="Models\ParticleEventResponse.cs" />
     <Compile Include="Models\ParticleFunctionResponse.cs" />
     <Compile Include="Models\ParticleGenericResponse.cs" />
+    <Compile Include="Models\ParticleLedgerInstanceResponse.cs" />
     <Compile Include="Models\ParticleVariableResponse.cs" />
     <Compile Include="ParticleCloud.cs" />
     <Compile Include="ParticleDevice.cs" />

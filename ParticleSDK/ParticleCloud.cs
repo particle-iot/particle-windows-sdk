@@ -23,6 +23,7 @@ namespace Particle.SDK
         internal static readonly string ParticleApiPathPasswordReset = "user/password-reset";
         internal static readonly string ParticleApiPathUser = "user";
         internal static readonly string ParticleApiPathDevices = "devices";
+        internal static readonly string ParticleApiPathLedgers = "orgs/{0}/ledgers";
         internal static readonly string ParticleApiPathClaimCode = "device_claims";
         internal static readonly string ParticleApiPathSim = "sims/{0}";
         internal static readonly string ParticleApiPathSimDataUsage = "sims/{0}/data_usage";

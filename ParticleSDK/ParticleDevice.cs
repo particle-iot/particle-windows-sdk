@@ -417,6 +417,31 @@ namespace Particle.SDK
         }
 
         /// <summary>
+        /// Retrieve a ledger instance from a device
+        /// </summary>
+        /// <param name="variable">Variable name</param>
+        /// <returns>Returns a ParticleVariableResponse</returns>
+        public async Task<ParticleLedgerInstance> GetLedgerInstance(string ledger, string organizationSlug)
+        {
+            if (string.IsNullOrWhiteSpace(ledger))
+                throw new ArgumentNullException(nameof(ledger));
+
+            try
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings() { DateTimeZoneHandling = DateTimeZoneHandling.Local };
+
+                string path = string.Format(ParticleCloud.ParticleApiPathLedgers, organizationSlug);
+                var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{path}/{ledger}/instances/{Id}");
+                ParticleLedgerInstanceResponse response = JsonConvert.DeserializeObject<ParticleLedgerInstanceResponse>(responseContent, jsonSerializerSettings);
+                return response.Instance;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Check device functions to see if it's compatible with tinker
         /// </summary>
         /// <returns>Returns true if device is compatible with tinker</returns>
