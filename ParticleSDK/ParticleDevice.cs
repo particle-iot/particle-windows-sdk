@@ -275,6 +275,14 @@ namespace Particle.SDK
             }
         }
 
+        /// <summary>
+        /// Readonly value of development state from ParticleDeviceResponse
+        /// </summary>
+        public bool IsDevelopment
+        {
+            get { return deviceState.Development; }
+        }
+
         #endregion
 
         #region Constructors
