@@ -414,11 +414,23 @@ namespace Particle.SDK
                 var result = JToken.Parse(responseContent);
 
                 List<ParticleDevice> devices = new List<ParticleDevice>();
+                int totalPages = result["meta"]["total_pages"].Value<int>();
                 foreach (JObject device in (JArray)result["devices"])
                 {
                     ParticleDeviceResponse deviceState = device.ToObject<ParticleDeviceResponse>(jsonSerializer);
                     ParticleDevice particleDevice = new ParticleDevice(deviceState, this);
                     devices.Add(particleDevice);
+                }
+                for (int i = 2; i <= totalPages; i++)
+                {
+                    responseContent = await GetDataAsync($"{ParticleApiVersion}/{path}?page={i}");
+                    result = JToken.Parse(responseContent);
+                    foreach (JObject device in (JArray)result["devices"])
+                    {
+                        ParticleDeviceResponse deviceState = device.ToObject<ParticleDeviceResponse>(jsonSerializer);
+                        ParticleDevice particleDevice = new ParticleDevice(deviceState, this);
+                        devices.Add(particleDevice);
+                    }
                 }
 
                 return new List<ParticleDevice>(devices);

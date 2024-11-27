@@ -113,14 +113,6 @@ namespace Particle.SDK
         }
 
         /// <summary>
-        /// Readonly RequiresDeepUpdate from ParticleDeviceResponse
-        /// </summary>
-        public bool RequiresDeepUpdate
-        {
-            get { return deviceState.RequiresDeepUpdate; }
-        }
-
-        /// <summary>
         /// Readonly ProductId from ParticleDeviceResponse
         /// </summary>
         public int ProductId
@@ -189,11 +181,11 @@ namespace Particle.SDK
         }
 
         /// <summary>
-        /// Readonly LastICCID from ParticleDeviceResponse
+        /// Readonly ICCID from ParticleDeviceResponse
         /// </summary>
-        public string LastICCID
+        public string ICCID
         {
-            get { return deviceState.LastICCID; }
+            get { return deviceState.ICCID; }
         }
 
         /// <summary>
@@ -205,11 +197,27 @@ namespace Particle.SDK
         }
 
         /// <summary>
-        /// Readonly CurrentBuildTarget from ParticleDeviceResponse
+        /// Readonly SystemFirmwareVersion from ParticleDeviceResponse
         /// </summary>
-        public string CurrentBuildTarget
+        public string SystemFirmwareVersion
         {
-            get { return deviceState.CurrentBuildTarget; }
+            get { return deviceState.SystemFirmwareVersion; }
+        }
+
+        /// <summary>
+        /// Readonly FirmwareProductId from ParticleDeviceResponse
+        /// </summary>
+        public int FirmwareProductId
+        {
+            get { return deviceState.FirmwareProductId; }
+        }
+
+        /// <summary>
+        /// Readonly FirmwareVersion from ParticleDeviceResponse
+        /// </summary>
+        public int FirmwareVersion
+        {
+            get { return deviceState.FirmwareVersion; }
         }
 
         /// <summary>
@@ -226,14 +234,6 @@ namespace Particle.SDK
         public string[] Functions
         {
             get { return deviceState.Functions; }
-        }
-
-        /// <summary>
-        /// Readonly CC3000PatchVersion from ParticleDeviceResponse
-        /// </summary>
-        public string CC3000PatchVersion
-        {
-            get { return deviceState.CC3000PatchVersion; }
         }
 
         /// <summary>
@@ -273,6 +273,14 @@ namespace Particle.SDK
                 mbsUsed = value;
                 OnPropertyChanged("MbsUsed");
             }
+        }
+
+        /// <summary>
+        /// Readonly value of development state from ParticleDeviceResponse
+        /// </summary>
+        public bool IsDevelopment
+        {
+            get { return deviceState.Development; }
         }
 
         #endregion
@@ -593,7 +601,7 @@ namespace Particle.SDK
                     DateTimeZoneHandling = DateTimeZoneHandling.Local
                 };
 
-                var particleApiPathSimDataUsage = string.Format(ParticleCloud.ParticleApiPathSim, LastICCID);
+                var particleApiPathSimDataUsage = string.Format(ParticleCloud.ParticleApiPathSim, ICCID);
                 var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{particleApiPathSimDataUsage}");
 
                 ParticleSimResponse sim = JsonConvert.DeserializeObject<ParticleSimResponse>(responseContent, jsonSerializerSettings);
@@ -635,7 +643,7 @@ namespace Particle.SDK
 
             try
             {
-                var particleApiPathSimDataUsage = string.Format(ParticleCloud.ParticleApiPathSimDataUsage, LastICCID);
+                var particleApiPathSimDataUsage = string.Format(ParticleCloud.ParticleApiPathSimDataUsage, ICCID);
                 var responseContent = await particleCloud.GetDataAsync($"{ParticleCloud.ParticleApiVersion}/{particleApiPathSimDataUsage}");
                 var result = JToken.Parse(responseContent);
 
