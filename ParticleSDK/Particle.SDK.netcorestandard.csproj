@@ -1,20 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RestApi\ParticleRestApiWindowsWebHttp.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="packages.config" />
-    <None Remove="Particle.SDK.win81+wpa81.nuspec" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
 </Project>
